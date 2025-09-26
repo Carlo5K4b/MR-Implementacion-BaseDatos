@@ -2,8 +2,6 @@
 //Use the concepts of the relational model and the SQL DML (Data Management Language) and consult the information in the database engines (Discografia)
 
 
-
-
 /*TALLER #2 - Carlos Beltrán*/
 USE Discografia
 
@@ -26,10 +24,19 @@ USE Discografia
  Tener en cuenta que el nombre del compositor viene completo
  (usar función CHARINDEX)*/
 
-  SELECT 
+  /*SELECT 
     c.Nombre AS Compositor,
     COUNT(cc.IdCancion) AS TotalCanciones,
     STRING_AGG(ca.Titulo, ', ') AS Canciones
+FROM Compositor c
+INNER JOIN CancionCompositor cc ON c.Id = cc.IdCompositor
+INNER JOIN Cancion ca ON cc.IdCancion = ca.Id
+WHERE CHARINDEX('JUANES', c.Nombre) > 0
+GROUP BY c.Nombre;*/
+
+  SELECT 
+    c.Nombre AS Compositor,
+    COUNT(cc.IdCancion) AS TotalCanciones
 FROM Compositor c
 INNER JOIN CancionCompositor cc ON c.Id = cc.IdCompositor
 INNER JOIN Cancion ca ON cc.IdCancion = ca.Id
@@ -40,21 +47,11 @@ GROUP BY c.Nombre;
 /*Pregunta b:
  ¿Qué interpretaciones se tienen de la canción "Lluvia" y en qué ritmos?*/
  
- SELECT 
-    c.Titulo AS Cancion,
-    i.IdInterprete AS Interpretacion,
-    r.Ritmo
-FROM Cancion c
-INNER JOIN Interpretacion i ON c.Id = i.IdCancion
-INNER JOIN Ritmo r ON i.IdRitmo = r.Id
-WHERE c.Titulo = 'Lluvia';
-
-
-
 SELECT 
     c.Titulo AS Cancion,
-   inter.Nombre AS Interprete_Nombre,
-    r.Ritmo
+    inter.Nombre AS Interprete,
+    r.Ritmo,
+    i.IdInterprete AS Tiempo
 FROM Cancion c
 INNER JOIN Interpretacion i ON c.Id = i.IdCancion
 INNER JOIN Ritmo r ON i.IdRitmo = r.Id
@@ -128,6 +125,8 @@ GROUP BY I.Nombre
 HAVING COUNT(DISTINCT CC.IdCancion) > 0 
    AND COUNT(DISTINCT IT.Id) > 0
 ORDER BY I.Nombre;
+
+
 
 
 
